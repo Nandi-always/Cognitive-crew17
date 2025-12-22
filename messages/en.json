@@ -1,0 +1,32 @@
+{
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "workspace": "Workspace",
+    "logout": "Logout"
+  },
+  "hero": {
+    "title": "Design Your Intelligent Digital Home Layout",
+    "subtitle": "Upload a sketch or describe your home to instantly see AI-generated layout options",
+    "uploadButton": "Upload Floor Plan",
+    "describeButton": "Describe My Home"
+  },
+  "features": {
+    "aiLayout": "AI Layout Generation",
+    "smartZoning": "Smart Zoning",
+    "walkthrough": "3D Walkthrough",
+    "energy": "Energy Efficient"
+  },
+  "workspace": {
+    "projectSettings": "Project Settings",
+    "projectName": "Project Name",
+    "totalArea": "Total Area (sq ft)",
+    "style": "Style",
+    "rooms": "Rooms",
+    "addRoom": "+ Add Room",
+    "layouts": "2D Layout",
+    "threeD": "3D View",
+    "analytics": "Analytics",
+    "generateLayout": "Generate Layout"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "navigation": {
+    "home": "होम",
+    "dashboard": "डैशबोर्ड",
+    "workspace": "वर्कस्पेस",
+    "logout": "लॉगआउट"
+  },
+  "hero": {
+    "title": "अपने बुद्धिमान डिजिटल होम लेआउट को डिजाइन करें",
+    "subtitle": "एक स्केच अपलोड करें या अपने घर का वर्णन करें तो तुरंत एआई द्वारा उत्पादित लेआउट विकल्प देखें",
+    "uploadButton": "फ्लोर प्लान अपलोड करें",
+    "describeButton": "मेरा घर वर्णन करें"
+  },
+  "features": {
+    "aiLayout": "एआई लेआउट जेनरेशन",
+    "smartZoning": "स्मार्ट जोनिंग",
+    "walkthrough": "3D वॉकथ्रू",
+    "energy": "ऊर्जा कुशल"
+  },
+  "workspace": {
+    "projectSettings": "प्रोजेक्ट सेटिंग्स",
+    "projectName": "प्रोजेक्ट का नाम",
+    "totalArea": "कुल क्षेत्र (वर्ग फीट)",
+    "style": "शैली",
+    "rooms": "कमरे",
+    "addRoom": "+ कमरा जोड़ें",
+    "layouts": "2D लेआउट",
+    "threeD": "3D व्यू",
+    "analytics": "विश्लेषण",
+    "generateLayout": "लेआउट उत्पन्न करें"
+  }
+}
