@@ -19,9 +19,11 @@ export function useDeviceOrientation() {
       }
     };
 
-    const handleOrientation = (event: DeviceOrientationEvent) => {
+    const handleOrientation = (_event: DeviceOrientationEvent) => {
       // Handle device orientation
     };
+
+    handlePermission();
 
     return () => {
       window.removeEventListener('deviceorientation', handleOrientation);

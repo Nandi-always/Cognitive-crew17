@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
 export interface Score {
   spaceEfficiency: number;
   naturalLight: number;
@@ -37,8 +35,7 @@ export function calculateLayoutScore(
   const energy = Math.min((avgRoomSize / 100) * 50, 100);
 
   // Overall score
-  const overall =
-    (spaceEfficiency + naturalLight + privacy + circulation + energy) / 5;
+  const overall = (spaceEfficiency + naturalLight + privacy + circulation + energy) / 5;
 
   return {
     spaceEfficiency: Math.round(spaceEfficiency),
@@ -53,7 +50,7 @@ export function calculateLayoutScore(
 export function generateLayoutVariants(
   bhk: number,
   area: number,
-  style: string
+  _style: string
 ): Array<{ id: string; name: string; rooms: any[] }> {
   const variants = [];
 

@@ -1,7 +1,7 @@
 'use client';
 
-import { useLayoutStore, type Room, type Furniture } from '@/lib/stores/layout';
-import { Stage, Layer, Rect, Line, Circle, Text as KonvaText } from 'react-konva';
+import { useLayoutStore } from '@/lib/stores/layout';
+import { Stage, Layer, Rect, Line } from 'react-konva';
 import { useState } from 'react';
 
 export function FloorPlanCanvas() {

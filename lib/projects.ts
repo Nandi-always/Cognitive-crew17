@@ -1,6 +1,4 @@
 import { prisma } from '@/lib/db';
-import type { Session } from 'next-auth';
-import type { User } from '@prisma/client';
 
 export async function createProject(
   userId: string,

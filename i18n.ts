@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation';
-import { getRequestConfig } from 'next-intl/server';
 
 const locales = ['en', 'hi', 'kn'];
 
-export default getRequestConfig(async ({ locale }) => {
-  if (!locales.includes(locale as any)) notFound();
+export default async function getI18nConfig({ locale }: { locale?: string | undefined }) {
+  const active = locale || 'en';
+  if (!locales.includes(active as any)) notFound();
 
   return {
-    messages: (await import(`./messages/${locale}.json`)).default,
+    messages: (await import(`./messages/${active}.json`)).default,
   };
-});
+}
