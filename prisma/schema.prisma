@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -36,9 +36,10 @@ model Project {
   bhk       Int      // 1-5 bedrooms
   style     String   // Modern, Minimalist, Traditional, Scandinavian
   
-  layout    Json     // Stores rooms, furniture, walls data
-  variants  Json?    // Multiple layout options
-  scores    Json?    // Layout efficiency scores
+  // Stored as JSON strings in SQLite for local dev. Convert to native Json when using Postgres.
+  layout    String   // Stores rooms, furniture, walls data (JSON string)
+  variants  String?  // Multiple layout options (JSON string)
+  scores    String?  // Layout efficiency scores (JSON string)
   
   isPublic  Boolean  @default(false)
   thumbnail String?
