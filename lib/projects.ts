@@ -14,11 +14,11 @@ export async function createProject(
       area,
       bhk,
       style,
-      layout: {
+      layout: JSON.stringify({
         rooms: [],
         walls: [],
         furniture: [],
-      },
+      }),
     },
   });
 }

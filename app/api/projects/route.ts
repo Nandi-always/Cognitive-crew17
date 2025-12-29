@@ -24,11 +24,11 @@ export async function POST(req: NextRequest) {
         area: parseInt(area),
         bhk: parseInt(bhk),
         style,
-        layout: {
+        layout: JSON.stringify({
           rooms: [],
           walls: [],
           furniture: [],
-        },
+        }),
       },
     });
 

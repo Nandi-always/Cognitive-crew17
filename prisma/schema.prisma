@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -38,9 +38,9 @@ model Project {
   bhk   Int // 1-5 bedrooms
   style String // Modern, Minimalist, Traditional, Scandinavian
 
-  layout   Json // Stores rooms, furniture, walls data
-  variants Json? // Multiple layout options
-  scores   Json? // Layout efficiency scores
+  layout   String // Stores rooms, furniture, walls data (JSON string)
+  variants String? // Multiple layout options (JSON string)
+  scores   String? // Layout efficiency scores (JSON string)
 
   isPublic  Boolean @default(false)
   thumbnail String?
@@ -95,11 +95,11 @@ model Device {
   type     String // e.g., "light", "sensor", "camera", "thermostat"
   category String // e.g., "lighting", "security", "climate"
 
-  position Json // { x: number, y: number } - position on 2D layout
+  position String // { x: number, y: number } - position on 2D layout (JSON string)
   roomId   String? // Room where device is located
 
-  settings Json? // Device-specific settings
-  status   String @default("active") // active, inactive, offline
+  settings String? // Device-specific settings (JSON string)
+  status   String  @default("active") // active, inactive, offline
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

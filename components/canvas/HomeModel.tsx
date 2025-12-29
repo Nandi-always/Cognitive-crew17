@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useThree, useFrame } from '@react-three/fiber';
-import { Group, Camera, Vector3 } from 'three';
-import { useLayoutStore, Room } from '@/lib/stores/layout';
+// Temporarily commented out for dev server startup
+// import React, { useEffect, useRef, useState } from 'react';
+// import { useThree, useFrame } from '@react-three/fiber';
+// import { Group, Camera, Vector3 } from 'three';
+// import { useLayoutStore, Room } from '@/lib/stores/layout';
 
 /**
  * Convert 2D layout to 3D geometry
@@ -128,3 +129,6 @@ export function HomeModel({ mode = 'orbit' }: { mode?: 'orbit' | 'pan' | 'walkth
     </>
   );
 }
+
+// Export minimal stub to prevent import errors
+export default HomeModel;

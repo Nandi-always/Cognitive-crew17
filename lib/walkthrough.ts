@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Vector3, Camera } from 'three';
+import { Vector3 } from 'three';
 import { useLayoutStore, Room } from '@/lib/stores/layout';
 
 interface Keyframe {
@@ -113,7 +113,7 @@ export function WalkthroughController({
     }
   }, [isPlaying, rooms]);
 
-  useFrame((_, delta) => {
+  useFrame((_: any, delta: number) => {
     if (!isPlayingRef.current || keyframesRef.current.length === 0) return;
 
     elapsedRef.current += delta * speed;

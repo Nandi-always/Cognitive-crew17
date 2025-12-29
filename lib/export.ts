@@ -38,7 +38,7 @@ export async function exportLayoutAsImage(
 
     return new Promise((resolve, reject) => {
       canvas.toBlob(
-        (blob) => {
+        (blob: Blob | null) => {
           if (blob) {
             resolve(blob);
           } else {

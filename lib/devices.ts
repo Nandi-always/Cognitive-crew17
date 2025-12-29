@@ -9,7 +9,7 @@ export async function createDevice(
   name: string,
   type: string,
   category: string,
-  position: { x: number; y: number },
+  position: { x: number; y: number } | string,
   roomId?: string,
   settings?: any
 ) {
@@ -19,9 +19,12 @@ export async function createDevice(
       name,
       type,
       category,
-      position,
+      position: typeof position === 'string' ? position : JSON.stringify(position),
       roomId,
-      settings,
+      settings:
+        typeof settings === 'string' || settings === undefined
+          ? settings
+          : JSON.stringify(settings),
     },
   });
 }
@@ -36,7 +39,21 @@ export async function getProjectDevices(projectId: string) {
 export async function updateDevice(deviceId: string, updates: any) {
   return prisma.device.update({
     where: { id: deviceId },
-    data: updates,
+    data: {
+      ...updates,
+      ...(updates.position && {
+        position:
+          typeof updates.position === 'string'
+            ? updates.position
+            : JSON.stringify(updates.position),
+      }),
+      ...(updates.settings && {
+        settings:
+          typeof updates.settings === 'string'
+            ? updates.settings
+            : JSON.stringify(updates.settings),
+      }),
+    },
   });
 }
 

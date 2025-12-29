@@ -64,8 +64,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const updated = await prisma.project.update({
       where: { id },
       data: {
-        layout,
-        ...(scores && { scores }),
+        layout: typeof layout === 'string' ? layout : JSON.stringify(layout),
+        ...(scores && { scores: typeof scores === 'string' ? scores : JSON.stringify(scores) }),
       },
       select: { layout: true, variants: true, scores: true },
     });
