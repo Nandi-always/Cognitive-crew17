@@ -1,0 +1,218 @@
+@host = http://localhost:3000
+@contentType = application/json
+@userId = test-user-id-123
+@projectId = test-project-id-456
+
+###
+### Authentication Tests
+###
+
+### POST /api/auth/signin - Login with credentials
+POST {{host}}/api/auth/callback/credentials
+Content-Type: {{contentType}}
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+### Projects API Tests
+###
+
+### POST /api/projects - Create new project
+POST {{host}}/api/projects
+Content-Type: {{contentType}}
+
+{
+  "userId": "{{userId}}",
+  "name": "Modern 2BHK Apartment",
+  "area": 1200,
+  "bhk": 2,
+  "style": "Modern"
+}
+
+### Save response projectId for further tests
+@projectId = 
+
+###
+
+### GET /api/projects - List user projects
+GET {{host}}/api/projects?userId={{userId}}
+Content-Type: {{contentType}}
+
+###
+
+### GET /api/projects/[id] - Get single project
+GET {{host}}/api/projects/{{projectId}}
+Content-Type: {{contentType}}
+
+###
+
+### PUT /api/projects/[id] - Update project metadata
+PUT {{host}}/api/projects/{{projectId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Updated Project Name",
+  "style": "Minimalist"
+}
+
+###
+### Layout API Tests
+###
+
+### GET /api/projects/[id]/layout - Get layout data
+GET {{host}}/api/projects/{{projectId}}/layout
+Content-Type: {{contentType}}
+
+###
+
+### PUT /api/projects/[id]/layout - Save layout with score computation
+PUT {{host}}/api/projects/{{projectId}}/layout
+Content-Type: {{contentType}}
+
+{
+  "layout": {
+    "rooms": [
+      {
+        "id": "room-1",
+        "name": "Living Room",
+        "type": "living",
+        "width": 400,
+        "height": 300,
+        "x": 40,
+        "y": 40,
+        "color": "#e0e7ff"
+      },
+      {
+        "id": "room-2",
+        "name": "Kitchen",
+        "type": "kitchen",
+        "width": 200,
+        "height": 200,
+        "x": 450,
+        "y": 40,
+        "color": "#fef3c7"
+      },
+      {
+        "id": "room-3",
+        "name": "Bedroom 1",
+        "type": "bedroom",
+        "width": 300,
+        "height": 280,
+        "x": 40,
+        "y": 360,
+        "color": "#e9d5ff"
+      }
+    ],
+    "furniture": [
+      {
+        "id": "furn-1",
+        "name": "Sofa",
+        "type": "sofa",
+        "width": 150,
+        "height": 80,
+        "x": 80,
+        "y": 80,
+        "roomId": "room-1",
+        "rotation": 0
+      },
+      {
+        "id": "furn-2",
+        "name": "Dining Table",
+        "type": "table",
+        "width": 100,
+        "height": 100,
+        "x": 500,
+        "y": 100,
+        "roomId": "room-1",
+        "rotation": 0
+      }
+    ],
+    "walls": []
+  },
+  "computeScore": true
+}
+
+###
+### Device Management API Tests
+###
+
+### POST /api/projects/[id]/devices - Add smart device
+POST {{host}}/api/projects/{{projectId}}/devices
+Content-Type: {{contentType}}
+
+{
+  "name": "Living Room Light",
+  "type": "light",
+  "category": "lighting",
+  "position": {"x": 100, "y": 100},
+  "roomId": "room-1",
+  "settings": {
+    "brightness": 100,
+    "colorTemp": 3000
+  }
+}
+
+###
+
+### GET /api/projects/[id]/devices - List devices in project
+GET {{host}}/api/projects/{{projectId}}/devices
+Content-Type: {{contentType}}
+
+###
+### Export API Tests
+###
+
+### GET /api/projects/[id]/export/json - Export layout as JSON
+GET {{host}}/api/projects/{{projectId}}/export/json
+Accept: application/json
+
+###
+
+### GET /api/projects/[id]/export/image - Export layout as PNG image
+GET {{host}}/api/projects/{{projectId}}/export/image?width=1200&height=900
+Accept: image/png
+
+###
+
+### GET /api/projects/[id]/export/pdf - Export layout as PDF
+GET {{host}}/api/projects/{{projectId}}/export/pdf?title=My%20Home%20Layout
+Accept: application/pdf
+
+###
+### Teardown Tests
+###
+
+### DELETE /api/projects/[id] - Delete project
+DELETE {{host}}/api/projects/{{projectId}}
+Content-Type: {{contentType}}
+
+###
+### Performance & Stress Tests (optional)
+###
+
+### Create multiple projects for load testing
+@i = 1
+
+POST {{host}}/api/projects
+Content-Type: {{contentType}}
+
+{
+  "userId": "{{userId}}",
+  "name": "Test Project {{i}}",
+  "area": 1000,
+  "bhk": 2,
+  "style": "Modern"
+}
+
+###
+
+### Notes for Testing
+### 1. Update @userId variable with actual user ID from your database
+### 2. Replace @projectId with actual project ID returned from create endpoint
+### 3. Ensure DATABASE_URL in .env.local points to running PostgreSQL instance
+### 4. Install VS Code "REST Client" extension (https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
+### 5. Click "Send Request" button above each request to execute
+### 6. Check response status: 200-299 = success, 4xx = client error, 5xx = server error
