@@ -1,14 +1,90 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { motion } from 'framer-motion';
 import { useLayoutStore } from '@/lib/stores/layout';
+import { useProjectManager } from '@/lib/hooks/useProjectManager';
 
 export default function Workspace() {
   const [activeTab, setActiveTab] = useState('2d');
-  const { rooms } = useLayoutStore();
+  const [projectId, setProjectId] = useState<string | null>(null);
+  const [projectName, setProjectName] = useState('My Beautiful Home');
+  const [projectArea, setProjectArea] = useState(900);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
+
+  const { rooms, furniture } = useLayoutStore();
+  const { saveLayout, getLayout, loading: apiLoading } = useProjectManager();
+
+  // Load layout from query params or localStorage
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('projectId');
+    if (id) {
+      setProjectId(id);
+      loadProjectLayout(id);
+    }
+  }, []);
+
+  const loadProjectLayout = async (id: string) => {
+    try {
+      const data = await getLayout(id);
+      if (data.layout) {
+        // Load rooms and furniture from layout
+        console.log('Loaded layout:', data.layout);
+      }
+    } catch (err) {
+      console.error('Failed to load layout:', err);
+      setSaveMessage('Failed to load layout');
+    }
+  };
+
+  const handleSaveLayout = async () => {
+    if (!projectId) {
+      setSaveMessage('No project selected. Please create or load a project first.');
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveMessage('');
+    try {
+      const layoutData = {
+        rooms: rooms.map((r) => ({
+          id: r.id,
+          name: r.name,
+          type: r.type,
+          width: r.width,
+          height: r.height,
+          x: r.x,
+          y: r.y,
+          color: r.color,
+        })),
+        furniture: furniture.map((f) => ({
+          id: f.id,
+          name: f.name,
+          type: f.type,
+          width: f.width,
+          height: f.height,
+          x: f.x,
+          y: f.y,
+          roomId: f.roomId,
+          rotation: f.rotation,
+        })),
+        walls: [],
+      };
+
+      await saveLayout(projectId, layoutData, true);
+      setSaveMessage('✅ Layout saved successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } catch (err) {
+      setSaveMessage('❌ Failed to save layout');
+      console.error(err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="h-screen w-screen flex overflow-hidden bg-slate-50">
@@ -27,7 +103,9 @@ export default function Workspace() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Total Area (sq ft)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Total Area (sq ft)
+              </label>
               <input type="number" defaultValue="900" className="input-field" />
             </div>
 
@@ -40,7 +118,9 @@ export default function Workspace() {
                   rooms.map((room) => (
                     <div key={room.id} className="p-3 rounded bg-slate-100 border border-slate-200">
                       <p className="text-sm font-medium text-slate-900">{room.name}</p>
-                      <p className="text-xs text-slate-600">{Math.round(room.width)} × {Math.round(room.height)} ft²</p>
+                      <p className="text-xs text-slate-600">
+                        {Math.round(room.width)} × {Math.round(room.height)} ft²
+                      </p>
                     </div>
                   ))
                 )}
@@ -53,7 +133,11 @@ export default function Workspace() {
       </motion.aside>
 
       {/* Center Canvas */}
-      <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex-1 flex flex-col">
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="flex-1 flex flex-col"
+      >
         {/* Canvas Toolbar */}
         <div className="h-14 border-b border-slate-200 bg-white px-6 flex items-center justify-between">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
@@ -65,10 +149,27 @@ export default function Workspace() {
           </Tabs>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">Undo</Button>
-            <Button variant="outline" size="sm">Redo</Button>
-            <Button className="bg-indigo-600 hover:bg-indigo-700" size="sm">Generate Layout</Button>
+            <Button variant="outline" size="sm">
+              Undo
+            </Button>
+            <Button variant="outline" size="sm">
+              Redo
+            </Button>
+            <Button
+              onClick={handleSaveLayout}
+              disabled={isSaving || apiLoading}
+              className="bg-green-600 hover:bg-green-700"
+              size="sm"
+            >
+              {isSaving ? 'Saving...' : '💾 Save'}
+            </Button>
+            <Button className="bg-indigo-600 hover:bg-indigo-700" size="sm">
+              Generate Layout
+            </Button>
           </div>
+          {saveMessage && (
+            <div className="ml-4 text-sm font-medium text-slate-700">{saveMessage}</div>
+          )}
         </div>
 
         {/* Canvas Area */}
@@ -102,7 +203,10 @@ export default function Workspace() {
                     { label: 'Privacy', score: 88 },
                     { label: 'Circulation', score: 70 },
                   ].map((metric) => (
-                    <div key={metric.label} className="p-4 rounded-lg bg-white border border-slate-200">
+                    <div
+                      key={metric.label}
+                      className="p-4 rounded-lg bg-white border border-slate-200"
+                    >
                       <p className="text-sm font-medium text-slate-600">{metric.label}</p>
                       <div className="flex items-baseline gap-2 mt-2">
                         <span className="text-3xl font-bold text-indigo-600">{metric.score}</span>
@@ -118,21 +222,34 @@ export default function Workspace() {
       </motion.main>
 
       {/* Right Panel - AI Assistant */}
-      <motion.aside initial={{ x: 300, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="w-80 bg-white border-l border-slate-200 flex flex-col overflow-hidden">
+      <motion.aside
+        initial={{ x: 300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        className="w-80 bg-white border-l border-slate-200 flex flex-col overflow-hidden"
+      >
         <div className="p-6 border-b border-slate-200">
           <h2 className="text-lg font-bold text-slate-900">AI Assistant</h2>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           <div className="p-4 rounded-lg bg-slate-100">
-            <p className="text-sm text-slate-700">👋 Welcome to SmartHomeViz AI! Describe your home preferences and I'll help optimize your layout.</p>
+            <p className="text-sm text-slate-700">
+              👋 Welcome to SmartHomeViz AI! Describe your home preferences and I'll help optimize
+              your layout.
+            </p>
           </div>
         </div>
 
         <div className="border-t border-slate-200 p-6">
           <div className="flex gap-2">
-            <input type="text" placeholder="Describe your preferences..." className="input-field flex-1" />
-            <Button className="bg-indigo-600 hover:bg-indigo-700" size="icon">✓</Button>
+            <input
+              type="text"
+              placeholder="Describe your preferences..."
+              className="input-field flex-1"
+            />
+            <Button className="bg-indigo-600 hover:bg-indigo-700" size="icon">
+              ✓
+            </Button>
           </div>
         </div>
       </motion.aside>
