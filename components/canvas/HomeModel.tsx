@@ -1,10 +1,9 @@
 'use client';
 
-// Temporarily commented out for dev server startup
-// import React, { useEffect, useRef, useState } from 'react';
-// import { useThree, useFrame } from '@react-three/fiber';
-// import { Group, Camera, Vector3 } from 'three';
-// import { useLayoutStore, Room } from '@/lib/stores/layout';
+import React, { useEffect, useRef } from 'react';
+import { useThree, useFrame } from '@react-three/fiber';
+import { Group, Vector3 } from 'three';
+import { useLayoutStore, Room } from '@/lib/stores/layout';
 
 /**
  * Convert 2D layout to 3D geometry
