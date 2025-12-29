@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
  * GET /api/projects/[id]/devices
  * Get all devices in a project
  */
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 

@@ -5,7 +5,6 @@ import { Stage, Layer, Rect, Line, Text } from 'react-konva';
 import { useState } from 'react';
 
 const GRID_SIZE = 40; // Grid cell size in pixels
-const SNAP_THRESHOLD = 5; // Pixels within which to snap
 
 function snapToGrid(value: number, gridSize: number): number {
   return Math.round(value / gridSize) * gridSize;

@@ -6,7 +6,7 @@ import { calculateLayoutScore } from '@/lib/ai-layout';
  * GET /api/projects/[id]/layout
  * Get the layout for a project
  */
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 

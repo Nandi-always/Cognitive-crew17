@@ -1,12 +1,12 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export const middleware = auth((req) => {
-  const isLoggedIn = !!req.auth;
+export const middleware = auth((_req) => {
+  const isLoggedIn = !!_req.auth;
 
   // Redirect to login if accessing protected routes without auth
-  if (!isLoggedIn && req.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/auth/login', req.url));
+  if (!isLoggedIn && _req.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/auth/login', _req.url));
   }
 
   if (!isLoggedIn && req.nextUrl.pathname.startsWith('/workspace')) {

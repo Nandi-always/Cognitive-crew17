@@ -9,8 +9,8 @@ import { prisma } from '@/lib/db';
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const width = req.nextUrl.searchParams.get('width') || '1200';
-    const height = req.nextUrl.searchParams.get('height') || '900';
+    req.nextUrl.searchParams.get('width') || '1200';
+    req.nextUrl.searchParams.get('height') || '900';
 
     const project = await prisma.project.findUnique({
       where: { id },

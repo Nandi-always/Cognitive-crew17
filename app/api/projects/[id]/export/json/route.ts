@@ -6,7 +6,7 @@ import { exportLayoutAsJSON } from '@/lib/export';
  * GET /api/projects/[id]/export/json
  * Export layout and project data as JSON
  */
-export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 

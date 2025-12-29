@@ -10,8 +10,6 @@ import { useProjectManager } from '@/lib/hooks/useProjectManager';
 export default function Workspace() {
   const [activeTab, setActiveTab] = useState('2d');
   const [projectId, setProjectId] = useState<string | null>(null);
-  const [projectName, setProjectName] = useState('My Beautiful Home');
-  const [projectArea, setProjectArea] = useState(900);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
 
