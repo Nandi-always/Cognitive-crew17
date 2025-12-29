@@ -18,7 +18,7 @@ export async function createProject(
         rooms: [],
         walls: [],
         furniture: [],
-      })),
+      }),
     },
   });
 }
